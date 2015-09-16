@@ -102,6 +102,8 @@ public:
   void SetState(MOUSE_STATE state) { m_pointerState = state; };
   void SetEnabled(bool enabled = true);
   MOUSE_STATE GetState() const { return m_pointerState; };
+  uint32_t GetAction() const;
+  uint32_t GetRawAction() const;
   uint32_t GetKey() const;
 
   int GetHold(int ButtonID) const;
@@ -109,6 +111,13 @@ public:
   inline int GetY(void) const { return m_mouseState.y; }
   inline int GetDX(void) const { return m_mouseState.dx; }
   inline int GetDY(void) const { return m_mouseState.dy; }
+  inline int GetRawX(void) const { return g_rawX; }
+  inline int GetRawY(void) const { return g_rawY; }
+  void SetRawX(int rawX) { g_rawX = rawX; }
+  void SetRawY(int rawY) { g_rawY = rawY; }
+
+  int g_rawX;           // raw value
+  int g_rawY;           // raw value
   MousePosition GetPosition() { return MousePosition{ m_mouseState.x, m_mouseState.y }; }
 
 private:
@@ -151,7 +160,7 @@ private:
      */
     BUTTON_ACTION Update(unsigned int time, int x, int y, bool down);
   private:
-    static const unsigned int click_confines = 5;        ///< number of pixels that the pointer may move while the button is down to trigger a click
+    static const unsigned int click_confines = 7;        ///< number of pixels that the pointer may move while the button is down to trigger a click
     static const unsigned int short_click_time = 1000;   ///< time for mouse down/up to trigger a short click rather than a long click
     static const unsigned int double_click_time = 500;   ///< time for mouse down following a short click to trigger a double click
 
@@ -195,11 +204,9 @@ private:
   bool bDoubleClick[MOUSE_MAX_BUTTON];
   int  bHold[MOUSE_MAX_BUTTON];
   bool bLongClick[MOUSE_MAX_BUTTON];
-
+  uint32_t m_RawAction;
+  uint32_t m_Action;
   uint32_t m_Key;
 };
 
 #endif
-
-
-

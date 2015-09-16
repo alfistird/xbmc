@@ -22,6 +22,7 @@
 #include "LanguageHook.h"
 #include "guilib/GraphicContext.h"
 #include "guilib/GUIWindowManager.h"
+#include "input/InputManager.h"
 #include "utils/log.h"
 
 #define NOTIFICATION_INFO     "info"
@@ -55,7 +56,27 @@ namespace XBMCAddon
       CSingleLock gl(g_graphicsContext);
       return g_windowManager.GetTopMostModalDialogID();
     }
+
+    long getMouseRawPosition()
+    {
+      return CInputManager::Get().GetRawX() * 10000 + CInputManager::Get().GetRawY();
+    }
     
+    long getMousePosition()
+    {
+      return CInputManager::Get().GetX() * 10000 + CInputManager::Get().GetY();
+    }
+    
+    long getMouseRawAction()
+    {
+    	return CInputManager::Get().GetRawAction();
+    }
+
+    long getMouseAction()
+    {
+    	return CInputManager::Get().GetAction();
+    }
+
     const char* getNOTIFICATION_INFO()    { return NOTIFICATION_INFO; }
     const char* getNOTIFICATION_WARNING() { return NOTIFICATION_WARNING; }
     const char* getNOTIFICATION_ERROR()   { return NOTIFICATION_ERROR; }

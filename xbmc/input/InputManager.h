@@ -180,6 +180,36 @@ public:
    */
   void SetMouseResolution(int maxX, int maxY, float speedX, float speedY);
 
+   /*! \brief Get the current mouse RAW x coordinate
+   *
+   */
+  uint32_t GetRawX() const
+
+  /*! \brief Get the current mouse x coordinate
+   *
+   */  
+  uint32_t GetX() const
+  
+   /*! \brief Get the current mouse RAW y coordinate
+   *
+   */
+  uint32_t GetRawY() const
+
+   /*! \brief Get the current mouse y coordinate
+   *
+   */
+  uint32_t GetY() const
+
+   /*! \brief Get the current mouse RAW action
+   *
+   */
+  uint32_t GetRawAction() const
+
+   /*! \brief Get the current mouse action
+   *
+   */
+  uint32_t GetAction() const  
+ 
   /*! \brief Enable the remote control
    *
    */
