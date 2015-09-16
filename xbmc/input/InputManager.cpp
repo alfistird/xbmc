@@ -767,6 +767,11 @@ uint32_t CInputManager::GetRawX() const
   return m_Mouse.GetRawX();
 }
 
+void CInputManager::SetRawX(int RawX)
+{
+  m_Mouse.SetRawX(RawX);
+}
+
 uint32_t CInputManager::GetX() const
 {
   return m_Mouse.GetX();
@@ -775,6 +780,11 @@ uint32_t CInputManager::GetX() const
 uint32_t CInputManager::GetRawY() const
 {
   return m_Mouse.GetRawY();
+}
+
+void CInputManager::SetRawY(int RawY)
+{
+  m_Mouse.SetRawY(RawY);
 }
 
 uint32_t CInputManager::GetY() const

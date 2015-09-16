@@ -94,7 +94,7 @@ typedef unsigned long kernel_ulong_t;
 #include "guilib/GraphicContext.h"
 #include "input/XBMC_keysym.h"
 #include "LinuxInputDevices.h"
-#include "input/MouseStat.h"
+#include "input/InputManager.h"
 #include "utils/log.h"
 
 #ifndef BITS_PER_LONG

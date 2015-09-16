@@ -113,12 +113,15 @@ public:
   inline int GetDY(void) const { return m_mouseState.dy; }
   inline int GetRawX(void) const { return g_rawX; }
   inline int GetRawY(void) const { return g_rawY; }
-  void SetRawX(int rawX) { g_rawX = rawX; }
-  void SetRawY(int rawY) { g_rawY = rawY; }
+  void SetRawX(int rawX) { g_rawX = rawX; };
+  void SetRawY(int rawY) { g_rawY = rawY; };
 
   int g_rawX;           // raw value
   int g_rawY;           // raw value
   MousePosition GetPosition() { return MousePosition{ m_mouseState.x, m_mouseState.y }; }
+
+  uint32_t m_RawAction;
+  uint32_t m_Action;
 
 private:
   /*! \brief Holds information regarding a particular mouse button state
@@ -204,8 +207,6 @@ private:
   bool bDoubleClick[MOUSE_MAX_BUTTON];
   int  bHold[MOUSE_MAX_BUTTON];
   bool bLongClick[MOUSE_MAX_BUTTON];
-  uint32_t m_RawAction;
-  uint32_t m_Action;
   uint32_t m_Key;
 };
 

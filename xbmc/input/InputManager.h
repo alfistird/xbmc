@@ -176,40 +176,50 @@ public:
    * \param[in] maxY    screen height
    * \param[in] speedX  mouse speed in x dimension
    * \param[in] speedY  mouse speed in y dimension
-   * \return 
+   * \return
    */
   void SetMouseResolution(int maxX, int maxY, float speedX, float speedY);
 
    /*! \brief Get the current mouse RAW x coordinate
    *
    */
-  uint32_t GetRawX() const
+  uint32_t GetRawX() const;
+
+   /*! \brief Set the current mouse RAW x coordinate
+   *
+   */
+  void SetRawX(int RawX);
 
   /*! \brief Get the current mouse x coordinate
    *
-   */  
-  uint32_t GetX() const
-  
+   */
+  uint32_t GetX() const;
+
    /*! \brief Get the current mouse RAW y coordinate
    *
    */
-  uint32_t GetRawY() const
+  uint32_t GetRawY() const;
+
+   /*! \brief Set the current mouse RAW y coordinate
+   *
+   */
+  void SetRawY(int RawY);
 
    /*! \brief Get the current mouse y coordinate
    *
    */
-  uint32_t GetY() const
+  uint32_t GetY() const;
 
    /*! \brief Get the current mouse RAW action
    *
    */
-  uint32_t GetRawAction() const
+  uint32_t GetRawAction() const;
 
    /*! \brief Get the current mouse action
    *
    */
-  uint32_t GetAction() const  
- 
+  uint32_t GetAction() const;
+
   /*! \brief Enable the remote control
    *
    */
