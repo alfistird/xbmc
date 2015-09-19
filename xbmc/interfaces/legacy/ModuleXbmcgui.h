@@ -46,7 +46,7 @@ namespace XBMCAddon
 
     /**
      * getCurrentWindowId() -- Returns the id for the current 'active' window as an integer.
-     * 
+     *
      * example:
      *   - wid = xbmcgui.getCurrentWindowId()
      */
@@ -54,11 +54,47 @@ namespace XBMCAddon
 
     /**
      * getCurrentWindowDialogId() -- Returns the id for the current 'active' dialog as an integer.
-     * 
+     *
      * example:
      *   - wid = xbmcgui.getCurrentWindowDialogId()
      */
     long getCurrentWindowDialogId();
+
+    /**
+     * getMouseRawPosition() -- Returns the mouse raw coordinats as an integer.
+     *
+     * example:
+     *   - pos = xbmcgui.getMouseRawPosition()
+     *     x = pos / 10000
+     *     y = pos % 10000
+     */
+    long getMouseRawPosition();
+
+    /**
+     * getMousePosition() -- Returns the mouse calibrated coordinats as an integer.
+     *
+     * example:
+     *   - pos = xbmcgui.getMousePosition()
+     *     x = pos / 10000
+     *     y = pos % 10000
+     */
+    long getMousePosition();
+
+    /**
+     * getMouseRawAction() -- Returns the raw mouse state.
+     *
+     * example:
+     *   - act = xbmcgui.getMouseRawAction()
+     */
+    long getMouseRawAction();
+
+    /**
+     * getMouseAction() -- Returns the mouse state.
+     *
+     * example:
+     *   - act = xbmcgui.getMouseAction()
+     */
+    long getMouseAction();
 
     SWIG_CONSTANT2(int,ICON_OVERLAY_NONE, CGUIListItem::ICON_OVERLAY_NONE);
     SWIG_CONSTANT2(int,ICON_OVERLAY_RAR, CGUIListItem::ICON_OVERLAY_RAR);

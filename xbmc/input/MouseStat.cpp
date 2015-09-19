@@ -21,8 +21,12 @@
 #include "MouseStat.h"
 #include "guilib/Key.h"
 #include "settings/lib/Setting.h"
+#include "guilib/GraphicContext.h"
+#include "guilib/GUIWindowManager.h"
 #include "utils/TimeUtils.h"
 #include "windowing/WindowingFactory.h"
+
+extern uint32_t click_confines;
 
 CMouseStat::CMouseStat()
 {
@@ -56,26 +60,28 @@ void CMouseStat::Initialize()
 
 void CMouseStat::HandleEvent(XBMC_Event& newEvent)
 {
+  int dx = 0;
+  int dy = 0;
+  int ignore_action = 0;
+
+  /* [Touch screens fix] Ignore actions if the pointer is outside of the screen area */
+  if(newEvent.motion.x > g_graphicsContext.GetWidth() || 
+      newEvent.motion.y > g_graphicsContext.GetHeight())
+  {
+    ignore_action = 1;
+    newEvent.button.button = XBMC_BUTTON_LEFT;
+    newEvent.button.type = XBMC_MOUSEBUTTONDOWN;
+  }
   // Save the mouse position and the size of the last move
-  int dx, dy;
-  if (newEvent.type == XBMC_MOUSEMOTION)
-  {
-    dx = newEvent.motion.x - m_mouseState.x;
-    dy = newEvent.motion.y - m_mouseState.y;
-  }
-  else if (newEvent.type == XBMC_MOUSEBUTTONDOWN || newEvent.type == XBMC_MOUSEBUTTONUP)
-  {
-    dx = newEvent.button.x - m_mouseState.x;
-    dy = newEvent.button.y - m_mouseState.y;
-  }
   else
   {
-    return;
+    dx = newEvent.motion.x - m_mouseState.x;
+    m_mouseState.dx = dx;
+    m_mouseState.x  = m_mouseState.x + dx;
+    dy = newEvent.motion.y - m_mouseState.y;
+    m_mouseState.dy = dy;
+    m_mouseState.y  = m_mouseState.y + dy;
   }
-  m_mouseState.dx = dx;
-  m_mouseState.dy = dy;
-  m_mouseState.x  = std::max(0, std::min(m_maxX, m_mouseState.x + dx));
-  m_mouseState.y  = std::max(0, std::min(m_maxY, m_mouseState.y + dy));
 
   // Fill in the public members
   if (newEvent.button.type == XBMC_MOUSEBUTTONDOWN)
@@ -103,7 +109,7 @@ void CMouseStat::HandleEvent(XBMC_Event& newEvent)
   // this is a click, doubleclick, drag etc
   uint32_t now = CTimeUtils::GetFrameTime();
   bool bNothingDown = true;
-  
+
   for (int i = 0; i < MOUSE_MAX_BUTTON; i++)
   {
     bClick[i] = false;
@@ -113,7 +119,16 @@ void CMouseStat::HandleEvent(XBMC_Event& newEvent)
 
     // CButtonState::Update does the hard work of checking the button state
     // and spotting drags, doubleclicks etc
-    CButtonState::BUTTON_ACTION action = m_buttonState[i].Update(now, m_mouseState.x, m_mouseState.y, m_mouseState.button[i]);
+    CButtonState::BUTTON_ACTION action = CButtonState::MB_NONE;
+
+    if(!ignore_action)
+    {
+      action = m_buttonState[i].Update(now, m_mouseState.x, m_mouseState.y, m_mouseState.button[i]);
+    }
+
+    /* Store raw action */
+    m_RawAction = (uint32_t)action;
+
     switch (action)
     {
     case CButtonState::MB_SHORT_CLICK:
@@ -237,6 +252,16 @@ bool CMouseStat::MovedPastThreshold() const
 uint32_t CMouseStat::GetKey() const
 {
   return m_Key;
+}
+
+uint32_t CMouseStat::GetRawAction() const
+{
+  return m_RawAction;
+}
+
+uint32_t CMouseStat::GetAction() const
+{
+  return m_Action;
 }
 
 int CMouseStat::GetHold(int ButtonID) const

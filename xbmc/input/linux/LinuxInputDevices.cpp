@@ -275,6 +275,17 @@ typedef enum
 
 static char remoteStatus = 0xFF; // paired, battery OK
 
+/* [AI]: calibration values */
+int calib_x_d;
+float calib_x_fact;
+int calib_y_d;
+float calib_y_fact;
+int swap_axes = 0;
+uint32_t touch_mouse = 0;
+uint32_t click_confines = 7;
+FILE *c_fp;
+/* [AI]: calibration values */
+
 CLinuxInputDevice::CLinuxInputDevice(const std::string fileName, int index)
 {
   m_fd = -1;
@@ -297,6 +308,40 @@ CLinuxInputDevice::CLinuxInputDevice(const std::string fileName, int index)
   m_deviceMaxKeyCode = 0;
   m_deviceMaxAxis = 0;
   m_bUnplugged = false;
+
+  /* [AI]: get calibration values from file */
+  /* set neutral values in case the read fails */
+  calib_x_d = g_graphicsContext.GetWidth();
+  calib_y_d = g_graphicsContext.GetHeight();
+  calib_x_fact = -1.0f;
+  calib_y_fact = -1.0f;
+
+  /* open the file */
+  char *pCalibFile = (char*)malloc(50);
+  sprintf(pCalibFile, "%s/touchscreen_axes_calib", getenv("HOME"));
+  c_fp = fopen(pCalibFile, "r");
+  free(pCalibFile);
+  if (c_fp == NULL)
+  {
+      printf("Error reading %s file\n", pCalibFile);
+  }
+  else
+  {
+    fscanf(c_fp, "calib_x_d=%d;calib_x_fact=%f;calib_y_d=%d;calib_y_fact=%f;swap_axes=%d;click_confines=%u;touch_mouse=%u\n",
+        &calib_x_d,
+        &calib_x_fact,
+        &calib_y_d,
+        &calib_y_fact,
+        &swap_axes,
+        &click_confines,
+        &touch_mouse
+    );
+    printf("File touchscreen_axes_calib successfully read:\n");
+
+    /* close the file */
+    fclose(c_fp);
+  }
+  /* [AI]: read calibration values from file */
 
   Open();
 }
@@ -456,6 +501,14 @@ bool CLinuxInputDevice::KeyEvent(const struct input_event& levt, XBMC_Event& dev
 {
   int code = levt.code;
 
+  /* [AI]: only for touchscreens, when PRESS action occurs */
+  if((levt.code == BTN_TOUCH || levt.code == BTN_TOOL_FINGER || levt.code == BTN_MOUSE)
+      && levt.value == 1 && (levt.type == EV_ABS || touch_mouse))
+  {
+    m_mouseX = g_graphicsContext.GetWidth() + 2;
+    m_mouseY = g_graphicsContext.GetHeight() + 2;
+  }
+
   /* map touchscreen and smartpad events to button mouse */
   if (code == BTN_TOUCH || code == BTN_TOOL_FINGER)
     code = BTN_MOUSE;
@@ -603,13 +656,27 @@ bool CLinuxInputDevice::AbsEvent(const struct input_event& levt, XBMC_Event& dev
   switch (levt.code)
   {
   case ABS_X:
-    m_mouseX = levt.value;
+    if(levt.value != g_Mouse.GetRawX())
+    {
+      g_Mouse.SetRawX(levt.value);
+    }
+    if(swap_axes)
+      m_mouseY = (int)(((float)levt.value) * (calib_y_fact)) + calib_y_d;
+    else
+      m_mouseX = (int)(((float)levt.value) * (calib_x_fact)) + calib_x_d;
     break;
 
   case ABS_Y:
-    m_mouseY = levt.value;
+    if(levt.value != g_Mouse.GetRawY())
+    {
+      g_Mouse.SetRawY(levt.value);
+    }
+    if(swap_axes)
+      m_mouseX = (int)(((float)levt.value) * (calib_x_fact)) + calib_x_d;
+    else
+      m_mouseY = (int)(((float)levt.value) * (calib_y_fact)) + calib_y_d;
     break;
-  
+
   case ABS_MISC:
     remoteStatus = levt.value & 0xFF;
     break;
