@@ -294,6 +294,7 @@ void CAdvancedSettings::Initialize()
   m_screenAlign_yOffset= 0;
   m_screenAlign_xStretchFactor = 1.0;
   m_screenAlign_yStretchFactor = 1.0;
+  m_screenAlign_confines = 5;
 
   m_curlconnecttimeout = 10;
   m_curllowspeedtime = 20;
@@ -843,6 +844,7 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
     XMLUtils::GetInt(pElement, "y_offset", m_screenAlign_yOffset );
     XMLUtils::GetFloat(pElement, "x_stretch_factor", m_screenAlign_xStretchFactor );
     XMLUtils::GetFloat(pElement, "y_stretch_factor", m_screenAlign_yStretchFactor );
+	XMLUtils::GetInt(pElement, "confines", m_screenAlign_confines );
   }
 
   // picture exclude regexps

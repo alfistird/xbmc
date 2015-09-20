@@ -323,6 +323,7 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
     int m_screenAlign_yOffset;
     float m_screenAlign_xStretchFactor;
     float m_screenAlign_yStretchFactor;
+	int m_screenAlign_confines;
 
     /* PVR/TV related advanced settings */
     int m_iPVRTimeCorrection;     /*!< @brief correct all times (epg tags, timer tags, recording tags) by this amount of minutes. defaults to 0. */
