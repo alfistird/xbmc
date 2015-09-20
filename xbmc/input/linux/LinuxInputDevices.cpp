@@ -94,7 +94,7 @@ typedef unsigned long kernel_ulong_t;
 #include "guilib/GraphicContext.h"
 #include "input/XBMC_keysym.h"
 #include "LinuxInputDevices.h"
-#include "input/MouseStat.h"
+#include "input/InputManager.h"
 #include "utils/log.h"
 #include "input/touch/generic/GenericTouchActionHandler.h"
 #include "input/touch/generic/GenericTouchInputHandler.h"
@@ -654,10 +654,18 @@ bool CLinuxInputDevice::AbsEvent(const struct input_event& levt, XBMC_Event& dev
   switch (levt.code)
   {
   case ABS_X:
+    if(levt.value != CInputManager::GetInstance().GetRawX())
+    {
+      CInputManager::GetInstance().SetRawX(levt.value);
+    }
     m_mouseX = (int)((float)levt.value * g_advancedSettings.m_screenAlign_xStretchFactor) + g_advancedSettings.m_screenAlign_xOffset; // stretch and shift touch x coordinates
     break;
 
   case ABS_Y:
+    if(levt.value != CInputManager::GetInstance().GetRawY())
+    {
+      CInputManager::GetInstance().SetRawY(levt.value);
+    }
     m_mouseY = (int)((float)levt.value * g_advancedSettings.m_screenAlign_yStretchFactor) + g_advancedSettings.m_screenAlign_yOffset; // stretch and shift touch y coordinates
     break;
 

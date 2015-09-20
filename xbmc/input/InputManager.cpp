@@ -787,6 +787,46 @@ MousePosition CInputManager::GetMousePosition()
   return m_Mouse.GetPosition();
 }
 
+uint32_t CInputManager::GetRawX() const
+{
+  return m_Mouse.GetRawX();
+}
+
+void CInputManager::SetRawX(int RawX)
+{
+  m_Mouse.SetRawX(RawX);
+}
+
+uint32_t CInputManager::GetX() const
+{
+  return m_Mouse.GetX();
+}
+
+uint32_t CInputManager::GetRawY() const
+{
+  return m_Mouse.GetRawY();
+}
+
+void CInputManager::SetRawY(int RawY)
+{
+  m_Mouse.SetRawY(RawY);
+}
+
+uint32_t CInputManager::GetY() const
+{
+  return m_Mouse.GetY();
+}
+
+uint32_t CInputManager::GetRawAction() const
+{
+  return m_Mouse.m_RawAction;
+}
+
+uint32_t CInputManager::GetAction() const
+{
+  return m_Mouse.m_Action;
+}
+
 void CInputManager::SetMouseResolution(int maxX, int maxY, float speedX, float speedY)
 {
   m_Mouse.SetResolution(maxX, maxY, speedX, speedY);

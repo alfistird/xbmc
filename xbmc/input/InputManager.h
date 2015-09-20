@@ -170,6 +170,46 @@ public:
    */
   MousePosition GetMousePosition();
 
+  /*! \brief Get the current mouse RAW x coordinate
+   *
+   */
+  uint32_t GetRawX() const;
+
+   /*! \brief Set the current mouse RAW x coordinate
+   *
+   */
+  void SetRawX(int RawX);
+
+  /*! \brief Get the current mouse x coordinate
+   *
+   */
+  uint32_t GetX() const;
+
+   /*! \brief Get the current mouse RAW y coordinate
+   *
+   */
+  uint32_t GetRawY() const;
+
+   /*! \brief Set the current mouse RAW y coordinate
+   *
+   */
+  void SetRawY(int RawY);
+
+   /*! \brief Get the current mouse y coordinate
+   *
+   */
+  uint32_t GetY() const;
+
+   /*! \brief Get the current mouse RAW action
+   *
+   */
+  uint32_t GetRawAction() const;
+
+   /*! \brief Get the current mouse action
+   *
+   */
+  uint32_t GetAction() const;
+
   /*! \brief Set the current screen resolution and pointer speed
    *
    * \param[in] maxX    screen width

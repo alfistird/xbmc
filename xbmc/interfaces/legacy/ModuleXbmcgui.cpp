@@ -22,6 +22,8 @@
 #include "LanguageHook.h"
 #include "guilib/GraphicContext.h"
 #include "guilib/GUIWindowManager.h"
+#include "input/InputManager.h"
+#include "utils/log.h"
 
 #define NOTIFICATION_INFO     "info"
 #define NOTIFICATION_WARNING  "warning"
@@ -43,6 +45,26 @@ namespace XBMCAddon
       DelayedCallGuard dg;
       CSingleLock gl(g_graphicsContext);
       return g_windowManager.GetTopMostModalDialogID();
+    }
+
+    long getMouseRawPosition()
+    {
+      return CInputManager::GetInstance().GetRawX() * 10000 + CInputManager::GetInstance().GetRawY();
+    }
+
+    long getMousePosition()
+    {
+      return CInputManager::GetInstance().GetX() * 10000 + CInputManager::GetInstance().GetY();
+    }
+
+    long getMouseRawAction()
+    {
+    	return CInputManager::GetInstance().GetRawAction();
+    }
+
+    long getMouseAction()
+    {
+    	return CInputManager::GetInstance().GetAction();
     }
 
     const char* getNOTIFICATION_INFO()    { return NOTIFICATION_INFO; }
